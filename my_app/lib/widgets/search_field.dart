@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   const SearchField({super.key});
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  final controller = TextEditingController();
+
+  void _onSubmitted(String value) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Поиск: $value")),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +30,10 @@ class SearchField extends StatelessWidget {
           ),
         ],
       ),
-      child: const TextField(
-        decoration: InputDecoration(
+      child: TextField(
+        controller: controller,
+        onSubmitted: _onSubmitted,
+        decoration: const InputDecoration(
           hintText: 'Поиск города...',
           prefixIcon: Icon(Icons.search, color: Colors.grey),
           border: InputBorder.none,

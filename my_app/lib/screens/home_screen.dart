@@ -4,18 +4,11 @@ import '../widgets/search_field.dart';
 import '../widgets/location_header.dart';
 import '../widgets/current_weather.dart';
 import '../widgets/weather_details.dart';
-import '../widgets/forecast_button.dart';
 import 'forecast_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  void _openForecastScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ForecastScreen()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +26,6 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 32),
             WeatherDetails(),
             Spacer(),
-            ForecastButton(),
           ],
         ),
       ),
