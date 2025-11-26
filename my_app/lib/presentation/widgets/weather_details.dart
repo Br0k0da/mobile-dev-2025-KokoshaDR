@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/weather_viewmodel.dart';
 import 'weather_parameter.dart';
 
 class WeatherDetails extends StatelessWidget {
@@ -6,6 +8,13 @@ class WeatherDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final weatherVm = Provider.of<WeatherViewModel>(context);
+    final weather = weatherVm.weather;
+
+    if (weather == null) {
+      return Container();
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -19,24 +28,19 @@ class WeatherDetails extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           WeatherParameter(
             icon: Icons.opacity,
-            value: '65%',
+            value: '${weather.humidity}%',
             label: 'Влажность',
           ),
           WeatherParameter(
             icon: Icons.air,
-            value: '3м/с',
+            value: '${weather.windSpeed}м/с',
             label: 'Ветер',
-          ),
-          WeatherParameter(
-            icon: Icons.compress,
-            value: '1015',
-            label: 'Давление',
-          ),
+          )
         ],
       ),
     );

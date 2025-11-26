@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/city_selection_viewmodel.dart';
+import '../viewmodels/weather_viewmodel.dart';
 
 class SearchField extends StatefulWidget {
   const SearchField({super.key});
@@ -10,10 +13,22 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   final controller = TextEditingController();
 
-  void _onSubmitted(String value) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Поиск: $value")),
-    );
+  void _onSubmitted(String value) async {
+    if (value.trim().isEmpty) return;
+
+    final cityVm = Provider.of<CitySelectionViewModel>(context, listen: false);
+    final weatherVm = Provider.of<WeatherViewModel>(context, listen: false);
+
+    try {
+      await cityVm.addCity(value.trim());
+      await weatherVm.setCity(value.trim());
+
+      controller.clear();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Ошибка: $e")),
+      );
+    }
   }
 
   @override

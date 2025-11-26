@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
-import 'screens/main_scaffold.dart';
+import 'package:simple_weather_app/presentation/views/main_scaffold.dart';
+import 'package:provider/provider.dart';
+import 'config/config.dart';
+import 'data/repository/weather_repository.dart';
+import 'data/services/weather_api_service.dart';
+import 'data/local/city_storage.dart';
+
+import 'presentation/viewmodels/weather_viewmodel.dart';
+import 'presentation/viewmodels/forecast_viewmodel.dart';
+import 'presentation/viewmodels/city_selection_viewmodel.dart';
+
 
 void main() {
-  runApp(const MainApp());
+  final apiService = WeatherApiService(apiKey: Config.apiKey);
+  final weatherRepository = WeatherRepository(apiService: apiService);
+  final cityStorage = CityStorage();
+
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => CitySelectionViewModel(storage: cityStorage)),
+        ChangeNotifierProvider(
+            create: (_) => WeatherViewModel(repository: weatherRepository)),
+        ChangeNotifierProvider(
+            create: (_) => ForecastViewModel(repository: weatherRepository)),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -11,11 +38,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Погода',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
       home: const MainScaffold(),
     );
   }

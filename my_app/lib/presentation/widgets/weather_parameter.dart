@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'weather_icon.dart';
+import 'package:simple_weather_app/presentation/widgets/weather_icon.dart';
 
 class WeatherParameter extends StatelessWidget {
   final IconData icon;
